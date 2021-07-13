@@ -4,7 +4,6 @@
      * 
      * @since 1.0.0
      * @author megasteve19
-     * @link
      */
     class MySQL
     {
@@ -33,7 +32,7 @@
         {
             if(empty($Data))
             {
-                return self::SecureQuery($Query);
+                return self::RegularQuery($Query);
             }
             return self::PreparedQuery($Query, $Data);
         }
@@ -110,13 +109,14 @@
          * @return array|bool On fetching something it will return array, otherwise true on success false on error.
          * @since 1.0.0
          */
-        private static function SecureQuery(string $Query): array|bool
+        private static function RegularQuery(string $Query): array|bool
         {
             $Connection = self::Connect();
             if(!$Connection)
             {
                 return false;
             }
+            self::$InsertId = $Connection->insert_id;
             $Result = self::DigestResult($Connection->query($Query));
             $Connection->close();
             return $Result;
