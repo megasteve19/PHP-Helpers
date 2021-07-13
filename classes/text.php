@@ -1,4 +1,10 @@
 <?php
+    /**
+     * A class for basic string operations.
+     * 
+     * @author megasteve19
+     * @since 1.0.0
+     */
     class Text
     {
         /**
