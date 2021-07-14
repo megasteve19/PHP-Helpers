@@ -1,6 +1,9 @@
 <?php
     /**
      * Really basic template engine to rendering views. Uses PHP's syntax.
+     * 
+     * @author megasteve19
+     * @since 1.0.0
      */
     class Templater
     {
