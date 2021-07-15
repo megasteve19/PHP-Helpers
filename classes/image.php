@@ -7,6 +7,7 @@
      */
     class Image
     {
+        public bool $Error = false;
         private GdImage $Image;
 
         /**
@@ -17,7 +18,19 @@
          */
         public function __construct(string $PathToImage)
         {
-            $this->Image = imagecreatefromstring(file_get_contents($PathToImage));
+            if(file_exists($PathToImage))
+            {
+                if(in_array(pathinfo($PathToImage, PATHINFO_EXTENSION), ["jpeg", "jpg"]))
+                {
+                    $Image = imagecreatefromstring(file_get_contents($PathToImage));
+                    if($Image != false)
+                    {
+                        $this->Image = $Image;
+                        return;
+                    }
+                }
+            }
+            $this->Error = true;
         }
 
         /**
@@ -79,13 +92,24 @@
          */
         public function Save(string $Path)
         {
-            ob_start();
-            imagejpeg($this->Image);
-            if(!is_dir(pathinfo($Path, PATHINFO_DIRNAME)))
+            if(ob_start())
             {
-                mkdir(pathinfo($Path, PATHINFO_DIRNAME));
+                if(imagejpeg($this->Image))
+                {
+                    if(!is_dir(pathinfo($Path, PATHINFO_DIRNAME)))
+                    {
+                        if(!mkdir(pathinfo($Path, PATHINFO_DIRNAME)))
+                        {
+                            return false;
+                        }
+                    }
+                    if(file_put_contents($Path, ob_get_clean()))
+                    {
+                        return true;
+                    }
+                }
             }
-            file_put_contents($Path, ob_get_clean());
+            return false;
         }
 
         /**
