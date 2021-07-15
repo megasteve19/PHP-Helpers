@@ -14,8 +14,8 @@
         /**
          * Renders a view by given path.
          * 
-         * @param string $View Relative path to view. View file extension must `.phtml`. Don't need to add extension into path.
-         * @param mixed $Data [Optional] Data to pass view.
+         * @param string $View Relative path to view. View file extension must `.phtml`. No need to add extension into path.
+         * @param mixed $Data [Optional] Data to pass view. If data is associative array it will extract as normal variables.
          * 
          * @return void
          * @since 1.0.0
@@ -23,6 +23,13 @@
         public static function Render(string $View, mixed $Data = null): void
         {
             ob_start();
+            if(gettype($Data) == "array")
+            {
+                if(array_keys($Data) != range(0, count($Data) - 1))
+                {
+                    extract($Data, EXTR_SKIP);
+                }
+            }
             require self::$ViewsDirectory . "$View.phtml";
             self::$Rendered .= ob_get_clean();
         }
