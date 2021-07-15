@@ -7,7 +7,14 @@
      */
     class Image
     {
+        /**
+         * @var bool $Error If any error occurs when loading image it will be true.
+         */
         public bool $Error = false;
+
+        /**
+         * @var GdImage $Image Image to play with.
+         */
         private GdImage $Image;
 
         /**
@@ -41,7 +48,7 @@
          * @return void
          * @since 1.0.0
          */
-        public function ScaleX(int $Width)
+        public function ScaleX(int $Width): void
         {
             if($this->Width() > $Width)
             {
@@ -58,7 +65,7 @@
          * @return void
          * @since 1.0.0
          */
-        public function ScaleY(int $Height)
+        public function ScaleY(int $Height): void
         {
             if($this->Width() > $Height)
             {
@@ -75,7 +82,7 @@
          * @return void
          * @since 1.0.0
          */
-        public function Compress(int $Level)
+        public function Compress(int $Level): void 
         {
             ob_start();
             imagejpeg($this->Image, null, $Level);
@@ -87,10 +94,10 @@
          * 
          * @param string $Path Path to save file.
          * 
-         * @return void
+         * @return bool True on success false on failure.
          * @since 1.0.0
          */
-        public function Save(string $Path)
+        public function Save(string $Path): bool
         {
             if(ob_start())
             {
@@ -118,7 +125,7 @@
          * @return int Image's width.
          * @since 1.0.0
          */
-        private function Width()
+        private function Width(): int
         {
             return imagesx($this->Image);
         }
@@ -129,7 +136,7 @@
          * @return int Image's heigth.
          * @since 1.0.0
          */
-        private function Height()
+        private function Height(): int
         {
             return imagesy($this->Image);
         }
@@ -140,7 +147,7 @@
          * @param int $Width New width of image.
          * @param int $Height New height of image.
          */
-        private function Resize(int $Width, int $Height)
+        private function Resize(int $Width, int $Height): void
         {
             $Image = imagecreatetruecolor($Width, $Height);
             imagecopyresampled($Image, $this->Image, 0, 0, 0, 0, $Width, $Height, $this->Width(), $this->Height());

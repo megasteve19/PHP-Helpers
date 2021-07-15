@@ -7,8 +7,14 @@
      */
     class Templater
     {
+        /**
+         * @var string $ViewsDirectory View directory to load views.
+         */
         public static string $ViewsDirectory = "";
 
+        /**
+         * @var string $Rendered Rendered ouput storage.
+         */
         private static string $Rendered = "";
 
         /**
